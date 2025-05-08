@@ -1,51 +1,34 @@
-import Image from "next/image"
-import { Calendar, MapPin } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+// components/event-card.tsx
 
-interface Event {
-  id: number
+type Event = {
+  id: string
   title: string
   startDate: string
   venue: string
   image: string
+  url: string
 }
 
-interface EventCardProps {
+type Props = {
   event: Event
 }
 
-export default function EventCard({ event }: EventCardProps) {
-  // Format the date and time
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-    return new Date(dateString).toLocaleDateString("en-US", options)
-  }
-
+export default function EventCard({ event }: Props) {
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
-      <div className="flex flex-col md:flex-row">
-        <div className="relative h-48 md:h-auto md:w-1/3">
-          <Image src={event.image || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
-        </div>
-        <CardContent className="flex-1 p-4">
-          <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
-          <div className="flex items-center text-gray-600 mb-2">
-            <Calendar className="h-4 w-4 mr-2" />
-            <span className="text-sm">{formatDate(event.startDate)}</span>
-          </div>
-          <div className="flex items-center text-gray-600">
-            <MapPin className="h-4 w-4 mr-2" />
-            <span className="text-sm">{event.venue}</span>
-          </div>
-        </CardContent>
-      </div>
-    </Card>
+    <a
+      href={event.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block p-4 border rounded-lg shadow-sm hover:shadow-md transition"
+    >
+      <img
+        src={event.image}
+        alt={event.title}
+        className="w-full h-48 object-cover rounded-md mb-4"
+      />
+      <h3 className="text-lg font-semibold">{event.title}</h3>
+      <p className="text-sm text-gray-600">{new Date(event.startDate).toLocaleString()}</p>
+      <p className="text-sm text-gray-500">{event.venue}</p>
+    </a>
   )
 }
